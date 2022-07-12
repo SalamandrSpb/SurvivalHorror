@@ -8,6 +8,8 @@
 
 class UCameraComponent;
 class USpringArmComponent;
+class USHInventoryComponent;
+class ASHPlayerHUD;
 
 UCLASS()
 class SURVIVALHORRORCPLUS1_API ASHCharacter : public ACharacter
@@ -31,6 +33,12 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	float MoveDirection() const;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	USHInventoryComponent* InventoryComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	ASHPlayerHUD* PlayerHUD;
+
 
 public:	
 	// Called every frame
@@ -42,5 +50,6 @@ public:
 private:
 	void MoveForward(float Value);
 	void MoveRight(float Value);
+	void OpenCloseInventory();
 
 };

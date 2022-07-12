@@ -5,6 +5,8 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Inventory/SHInventoryComponent.h"
+#include "UI/SHPlayerHUD.h"
 
 // Sets default values
 ASHCharacter::ASHCharacter()
@@ -18,6 +20,8 @@ ASHCharacter::ASHCharacter()
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
 	CameraComponent->SetupAttachment(SpringArmComponent);
+
+	InventoryComponent = CreateDefaultSubobject<USHInventoryComponent>("InventoryComponent");
 	
 
 }
@@ -45,6 +49,7 @@ void ASHCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis("MoveRight", this, &ASHCharacter::MoveRight);
 	PlayerInputComponent->BindAxis("LookUp", this, &ASHCharacter::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("Turn", this, &ASHCharacter::AddControllerYawInput);
+	PlayerInputComponent->BindAction("Inventory", IE_Pressed, this, &ASHCharacter::OpenCloseInventory);
 
 }
 
@@ -58,6 +63,7 @@ void ASHCharacter::MoveRight(float Value)
 	AddMovementInput(GetActorRightVector(), Value);
 }
 
+
 float ASHCharacter::MoveDirection() const
 {
 	FVector VelocityNormal = GetVelocity().GetSafeNormal();
@@ -67,5 +73,15 @@ float ASHCharacter::MoveDirection() const
 	return DegreesAngle;
 }
 
+void ASHCharacter::OpenCloseInventory()
+{
+	const auto PlayerController = GetWorld()->GetFirstPlayerController();
+
+	PlayerHUD = Cast<ASHPlayerHUD>(PlayerController->GetHUD());
+	if (PlayerHUD)
+	{
+		PlayerHUD->OpenCloseInventory(PlayerController, InventoryComponent);
+	}
+}
 
 
