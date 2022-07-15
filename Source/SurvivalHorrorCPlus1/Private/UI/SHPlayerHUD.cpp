@@ -12,7 +12,7 @@ void ASHPlayerHUD::BeginPlay()
 	Super::BeginPlay();
 
 	InventoryWidget = CreateWidget<USHInventoryWidget>(GetWorld(), InventoryWidgetClass);
-	InventoryGridWidget = CreateWidget<USHInventoryGridWidget>(GetWorld(), InventoryWidgetClass);
+	InventoryGridWidget = CreateWidget<USHInventoryGridWidget>(GetWorld(), InventoryGridWidgetClass);
 }
 
 void ASHPlayerHUD::OpenCloseInventory(APlayerController* PlayerController, USHInventoryComponent* InventoryComponent)
@@ -22,6 +22,7 @@ void ASHPlayerHUD::OpenCloseInventory(APlayerController* PlayerController, USHIn
 		if (!InventoryWidget->IsInViewport())
 		{
 			InventoryWidget->AddToViewport();
+			InventoryWidget->InitialInventoryWidget(InventoryComponent);
 			PlayerController->SetInputMode(FInputModeGameAndUI());
 			PlayerController->SetShowMouseCursor(true);
 		}
